@@ -5,6 +5,10 @@ import { data } from "./components/data/data";
 import "./App.css";
 
 class App extends Component {
+  state = {
+    show: false,
+  };
+
   render() {
     // const data = [
     //   {
@@ -280,10 +284,15 @@ class App extends Component {
     //   },
     // ];
 
+    const btnText = this.state.show ? "Hide Products" : "Show Products";
+
     return (
       <div className="App">
         <Header />
-        <Products data={data} />
+        <button onClick={() => this.setState({ show: !this.state.show })}>
+          {btnText}
+        </button>
+        {this.state.show && <Products data={data} />}
       </div>
     );
   }
