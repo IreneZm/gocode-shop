@@ -7,7 +7,22 @@ import "./App.css";
 class App extends Component {
   state = {
     show: false,
+    category: "",
   };
+
+  filterBySelected = (id) => {
+    this.setState({ category: id });
+  };
+
+  categories = data
+    .map((p) => p.category)
+    .filter((value, index, array) => array.indexOf(value) === index);
+
+  componentDidMount() {
+    console.log("this.categories", this.categories);
+    console.log("this.categories[0]", this.categories[0]);
+    this.setState({ category: this.categories[0] });
+  }
 
   render() {
     // const data = [
@@ -283,16 +298,26 @@ class App extends Component {
     //     },
     //   },
     // ];
-
     const btnText = this.state.show ? "Hide Products" : "Show Products";
+    // const categories = data
+    //   .map((p) => p.category)
+    //   .filter((value, index, array) => array.indexOf(value) === index);
+    // this.setState({ category: categories[0] });
 
     return (
       <div className="App">
-        <Header />
+        <Header
+          categories={this.categories}
+          filterBySelected={this.filterBySelected}
+        />
+
         <button onClick={() => this.setState({ show: !this.state.show })}>
           {btnText}
         </button>
-        {this.state.show && <Products data={data} />}
+
+        {this.state.show && (
+          <Products data={data} category={this.state.category} />
+        )}
       </div>
     );
   }

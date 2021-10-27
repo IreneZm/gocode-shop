@@ -7,23 +7,37 @@ class Products extends Component {
     const { data } = this.props;
 
     return (
+      <section className="products">
+        {data.map(
+          (product) =>
+            product.category === this.props.category && (
+              <Product
+                key={product.id}
+                img={product.image}
+                price={product.price}
+                title={product.title}
+              />
+            )
+        )}
+      </section>
+
+      // <section className="products">
+      //   {data.map((product) => (
+      //     <Product
+      //       key={product.id}
+      //       img={product.image}
+      //       price={product.price}
+      //       title={product.title}
+      //     />
+      //   ))}
+      // </section>
+
       // <section className="products">
       //   {data.map((product, id) => (
       //     <Product key={id} product={product} />
       //   ))}
       // </section>
-      // this.props.show ? (
-      <section className="products">
-        {data.map((product) => (
-          <Product
-            key={product.id}
-            img={product.image}
-            price={product.price}
-            title={product.title}
-          />
-        ))}
-      </section>
-      // ) : null
+
       // <section className="products">
       //   {data.map(({ id, image, price, title }) => (
       //     <Product key={id} img={image} price={price} title={title} />
