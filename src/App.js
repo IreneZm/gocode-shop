@@ -1,22 +1,39 @@
 import React, { Component } from "react";
 import Header from "./components/Header/Header";
 import Products from "./components/Products/Products";
-import { data } from "./data/data";
+// import { data } from "./data/data";
 import "./App.css";
 
 class App extends Component {
   state = {
     show: false,
     category: "",
+    data: [],
+    categories: [],
   };
 
   filterBySelected = (selectedCategory) => {
     this.setState({ category: selectedCategory });
   };
 
-  categories = data
-    .map((p) => p.category)
-    .filter((value, index, array) => array.indexOf(value) === index);
+  componentDidMount() {
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        this.setState({ data });
+
+        const categories = data
+          .map((p) => p.category)
+          .filter((value, index, array) => array.indexOf(value) === index);
+
+        this.setState({ categories });
+      });
+  }
+
+  // categories = this.state.data
+  //   .map((p) => p.category)
+  //   .filter((value, index, array) => array.indexOf(value) === index);
 
   // componentDidMount() {
   //   console.log("this.categories", this.categories);
@@ -304,12 +321,12 @@ class App extends Component {
     //   .filter((value, index, array) => array.indexOf(value) === index);
     // this.setState({ category: categories[0] });
 
-    const { category } = this.state;
+    const { category, data, categories } = this.state;
 
     return (
       <div className="App">
         <Header
-          categories={this.categories}
+          categories={categories}
           filterBySelected={this.filterBySelected}
         />
 
