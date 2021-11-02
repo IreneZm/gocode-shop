@@ -4,21 +4,23 @@ import "./Products.css";
 
 class Products extends Component {
   render() {
-    const { data } = this.props;
+    const { data, category } = this.props;
+
+    // let filteredData =
+    //   category === ""
+    //     ? data
+    //     : data.filter((product) => product.category === category);
+
+    //The same as above but written better:
+    let filteredData = category
+      ? data.filter((product) => product.category === category)
+      : data;
 
     return (
       <section className="products">
-        {data.map(
-          (product) =>
-            product.category === this.props.category && (
-              <Product
-                key={product.id}
-                img={product.image}
-                price={product.price}
-                title={product.title}
-              />
-            )
-        )}
+        {filteredData.map(({ id, image, price, title }) => (
+          <Product key={id} img={image} price={price} title={title} />
+        ))}
       </section>
 
       // <section className="products">

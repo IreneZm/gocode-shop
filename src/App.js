@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./components/Header/Header";
 import Products from "./components/Products/Products";
-import { data } from "./components/data/data";
+import { data } from "./data/data";
 import "./App.css";
 
 class App extends Component {
@@ -10,19 +10,19 @@ class App extends Component {
     category: "",
   };
 
-  filterBySelected = (id) => {
-    this.setState({ category: id });
+  filterBySelected = (selectedCategory) => {
+    this.setState({ category: selectedCategory });
   };
 
   categories = data
     .map((p) => p.category)
     .filter((value, index, array) => array.indexOf(value) === index);
 
-  componentDidMount() {
-    console.log("this.categories", this.categories);
-    console.log("this.categories[0]", this.categories[0]);
-    this.setState({ category: this.categories[0] });
-  }
+  // componentDidMount() {
+  //   console.log("this.categories", this.categories);
+  //   console.log("this.categories[0]", this.categories[0]);
+  //   this.setState({ category: this.categories[0] });
+  // }
 
   render() {
     // const data = [
@@ -298,11 +298,13 @@ class App extends Component {
     //     },
     //   },
     // ];
-    const btnText = this.state.show ? "Hide Products" : "Show Products";
+    // const btnText = this.state.show ? "Hide Products" : "Show Products";
     // const categories = data
     //   .map((p) => p.category)
     //   .filter((value, index, array) => array.indexOf(value) === index);
     // this.setState({ category: categories[0] });
+
+    const { category } = this.state;
 
     return (
       <div className="App">
@@ -311,13 +313,13 @@ class App extends Component {
           filterBySelected={this.filterBySelected}
         />
 
-        <button onClick={() => this.setState({ show: !this.state.show })}>
+        {/* <button onClick={() => this.setState({ show: !this.state.show })}>
           {btnText}
-        </button>
+        </button> */}
 
-        {this.state.show && (
-          <Products data={data} category={this.state.category} />
-        )}
+        {/* {this.state.show && ( */}
+        <Products data={data} category={category} />
+        {/* )} */}
       </div>
     );
   }

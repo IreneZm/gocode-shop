@@ -3,6 +3,8 @@ import { Component } from "react";
 
 class Header extends Component {
   render() {
+    const { filterBySelected, categories } = this.props;
+
     return (
       <nav className="product-filter">
         <h1>Jackets</h1>
@@ -10,11 +12,9 @@ class Header extends Component {
         <div className="sort">
           <div className="collection-sort">
             <label>Filter by:</label>
-            <select
-              onChange={(ev) => this.props.filterBySelected(ev.target.value)}
-            >
-              {/* <option>---</option> */}
-              {this.props.categories.map((category) => (
+            <select onChange={(ev) => filterBySelected(ev.target.value)}>
+              <option value="">All</option>
+              {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
