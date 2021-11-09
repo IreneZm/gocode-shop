@@ -4,7 +4,7 @@ import "./Products.css";
 
 class Products extends Component {
   render() {
-    const { data, category } = this.props;
+    const { data, category, priceFilter } = this.props;
 
     // let filteredData =
     //   category === ""
@@ -12,9 +12,17 @@ class Products extends Component {
     //     : data.filter((product) => product.category === category);
 
     //The same as above but written better:
-    let filteredData = category
-      ? data.filter((product) => product.category === category)
-      : data;
+    // let filteredData = category
+    //   ? data.filter((product) => product.category === category)
+    //   : data;
+
+    //with pricerange
+    const filteredData = data.filter(
+      (product) =>
+        product.price >= priceFilter[0] &&
+        product.price <= priceFilter[1] &&
+        (!category || (category && product.category === category))
+    );
 
     return (
       <section className="products">

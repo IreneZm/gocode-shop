@@ -16,32 +16,9 @@ class App extends Component {
     categories: [],
     loading: false,
     error: false,
-  };
-
-  filterBySelected = (selectedCategory) => {
-    this.setState({ category: selectedCategory });
-  };
-
-  fetchProducts = async () => {
-    //intentionally should be used to allow re-render after an error in fetching and clicking the function
-    // this.setState({ loading: false });
-
-    try {
-      this.setState({ loading: true, error: false });
-
-      const res = await fetch("https://fakestoreapi.com/products");
-      //incorrect URL for error check
-      // const res = await fetch("https://festoreapi.com/products");
-      const data = await res.json();
-      const categories = await data
-        .map((p) => p.category)
-        .filter((value, index, array) => array.indexOf(value) === index);
-
-      // this.setState({ data, categories });
-      this.setState({ data, categories, loading: false });
-    } catch (e) {
-      this.setState({ error: true, loading: false });
-    }
+    priceRange: [0, 1000],
+    minPrice: 0,
+    maxPrice: 1000,
   };
 
   componentDidMount() {
@@ -60,6 +37,48 @@ class App extends Component {
     //   });
   }
 
+  fetchProducts = async () => {
+    // intentionally should be used to allow re-render after an error in fetching and clicking the function
+    // this.setState({ loading: false });
+
+    try {
+      this.setState({ loading: true, error: false });
+
+      const res = await fetch("https://fakestoreapi.com/products");
+      //incorrect URL for error check
+      // const res = await fetch("https://festoreapi.com/products");
+      const data = await res.json();
+      const categories = await data
+        .map((p) => p.category)
+        .filter((value, index, array) => array.indexOf(value) === index);
+
+      // this.setState({ data, categories });
+      this.setState({ data, categories, loading: false });
+      this.setPriceRanges(data);
+    } catch (e) {
+      this.setState({ error: true, loading: false });
+    }
+  };
+
+  setPriceRanges(data) {
+    const productWithMinPrice = data.reduce((prev, curr) =>
+      prev.price < curr.price ? prev : curr
+    );
+    console.log(productWithMinPrice);
+    const productWithMaxPrice = data.reduce((prev, curr) =>
+      prev.price > curr.price ? prev : curr
+    );
+    console.log(productWithMaxPrice);
+    this.setState({
+      priceRange: [productWithMinPrice.price, productWithMaxPrice.price],
+      minPrice: productWithMinPrice.price,
+      maxPrice: productWithMaxPrice.price,
+    });
+  }
+  filterBySelected = (selectedCategory) => {
+    this.setState({ category: selectedCategory });
+  };
+
   // categories = this.state.data
   //   .map((p) => p.category)
   //   .filter((value, index, array) => array.indexOf(value) === index);
@@ -70,20 +89,15 @@ class App extends Component {
     return (
       <div className="App">
         {loading ? (
-          <Container maxWidth="sm">
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: "10px",
-              }}
-            >
-              <CircularProgress
-                color="secondary"
-                sx={{ alignSelf: "center" }}
-              />
-            </Box>
-          </Container>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: "10px",
+            }}
+          >
+            <CircularProgress color="secondary" sx={{ alignSelf: "center" }} />
+          </Box>
         ) : error ? (
           <>
             <h1> There is an error </h1>
@@ -94,6 +108,12 @@ class App extends Component {
             <Header
               categories={categories}
               filterBySelected={this.filterBySelected}
+              priceRange={this.state.priceRange}
+              handleChangePrice={(value) =>
+                this.setState({ priceRange: value })
+              }
+              minPrice={this.state.minPrice}
+              maxPrice={this.state.maxPrice}
             />
 
             {/* <button onClick={() => this.setState({ show: !this.state.show })}>
@@ -101,7 +121,11 @@ class App extends Component {
           </button> */}
 
             {/* {this.state.show && ( */}
-            <Products data={data} category={category} />
+            <Products
+              data={data}
+              category={category}
+              priceFilter={this.state.priceRange}
+            />
             {/* )} */}
           </>
         )}

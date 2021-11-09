@@ -1,9 +1,15 @@
-import "./Header.css";
 import { Component } from "react";
+import { Slider } from "@mui/material";
+import "./Header.css";
 
 class Header extends Component {
+  handleChange = (event, newValue) => {
+    this.props.handleChangePrice(newValue);
+  };
+
   render() {
-    const { filterBySelected, categories } = this.props;
+    const { filterBySelected, categories, priceRange, minPrice, maxPrice } =
+      this.props;
 
     return (
       <nav className="product-filter">
@@ -32,8 +38,8 @@ class Header extends Component {
             </select> */}
           </div>
 
-          <div className="collection-sort">
-            <label>Sort by:</label>
+          {/* <div className="collection-sort"> */}
+          {/* <label>Sort by:</label>
             <select>
               <option value="/">Featured</option>
               <option value="/">Best Selling</option>
@@ -43,7 +49,25 @@ class Header extends Component {
               <option value="/">Price, high to low</option>
               <option value="/">Date, new to old</option>
               <option value="/">Date, old to new</option>
-            </select>
+            </select> */}
+          {/* <Slider
+              getAriaLabel={() => "Temperature range"}
+              value={value}
+              onChange={handleChange}
+              valueLabelDisplay="auto"
+              getAriaValueText={valuetext}
+            /> */}
+          <div className="collection-sort" style={{ width: 150 }}>
+            {priceRange.length && (
+              <Slider
+                value={[priceRange[0], priceRange[1]]}
+                min={minPrice}
+                max={maxPrice}
+                onChange={this.handleChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="non-linear-slider"
+              />
+            )}
           </div>
         </div>
       </nav>
